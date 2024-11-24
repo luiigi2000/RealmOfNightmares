@@ -1,0 +1,75 @@
+[gd_scene load_steps=9 format=3 uid="uid://ext0j3s7klmg"]
+
+[ext_resource type="PackedScene" uid="uid://dwxli14fcwgw7" path="res://GUY.glb" id="1_2mac5"]
+[ext_resource type="Script" path="res://enemy.gd" id="2_lnknh"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_odi5u"]
+animation = &"stab"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qiyh4"]
+animation = &"walkactualps"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_tg6wp"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_y8apx"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_0vtv0"]
+states/stab/node = SubResource("AnimationNodeAnimation_odi5u")
+states/stab/position = Vector2(365.333, 170)
+states/walkactualps/node = SubResource("AnimationNodeAnimation_qiyh4")
+states/walkactualps/position = Vector2(494.667, 66)
+transitions = ["Start", "walkactualps", SubResource("AnimationNodeStateMachineTransition_tg6wp"), "Start", "stab", SubResource("AnimationNodeStateMachineTransition_y8apx")]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_v2nsg"]
+
+[node name="GUY" instance=ExtResource("1_2mac5")]
+lock_rotation = true
+linear_damp = 5.0
+script = ExtResource("2_lnknh")
+
+[node name="Skeleton3D" parent="Armature" index="0"]
+bones/0/position = Vector3(0, 13.5218, 0)
+bones/0/rotation = Quaternion(-0.000694866, -0.00309073, -0.0142209, 0.999894)
+bones/1/rotation = Quaternion(-3.55271e-15, -1.19209e-07, 4.23516e-22, 1)
+bones/2/rotation = Quaternion(5.43735e-10, 5.67997e-09, -0.0952939, 0.995449)
+bones/3/position = Vector3(6.58981e-07, 5.95524, -2.7926)
+bones/3/rotation = Quaternion(-0.994025, -0.0301293, -0.0287571, 0.100895)
+bones/3/scale = Vector3(1, 1, 1)
+bones/4/rotation = Quaternion(-0.116161, 0.0393061, 0.0444736, 0.991455)
+bones/5/position = Vector3(0.129782, -1.03458, -1.71763)
+bones/5/rotation = Quaternion(0.998775, -0.0316249, 0.0284065, 0.0253087)
+bones/5/scale = Vector3(1, 1, 1)
+bones/6/rotation = Quaternion(0.0215262, 0.00224988, 0.00284073, 0.999762)
+bones/6/scale = Vector3(1, 1, 1)
+bones/7/rotation = Quaternion(0.0433394, 0.0024225, -0.678847, 0.732995)
+bones/7/scale = Vector3(1, 1, 1)
+bones/8/position = Vector3(-0.604038, 5.98082, 2.93553)
+bones/8/rotation = Quaternion(0.512562, 0.0477019, 0.851805, 0.0971202)
+bones/8/scale = Vector3(1, 1, 1)
+bones/9/rotation = Quaternion(-0.070796, 0.560619, 0.016673, 0.824874)
+bones/9/scale = Vector3(1, 1, 1)
+bones/11/position = Vector3(0.129781, -1.03458, 1.79668)
+bones/11/rotation = Quaternion(0.993348, 0.113874, 0.00459605, -0.0164531)
+bones/11/scale = Vector3(1, 1, 1)
+bones/12/rotation = Quaternion(-0.0203306, 0.0153297, 0.0693204, 0.997269)
+bones/12/scale = Vector3(1, 1, 1)
+bones/13/rotation = Quaternion(0.0388222, -3.43586e-07, -0.653122, 0.756257)
+bones/13/scale = Vector3(1, 1, 1)
+
+[node name="Cube_003" parent="Armature/Skeleton3D" index="0"]
+transform = Transform3D(0.130857, -0.0866994, -0.987603, -0.0649124, -0.994781, 0.0787286, -0.989274, 0.0538055, -0.135802, -3.66743, 7.47085, 3.78764)
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="2"]
+tree_root = SubResource("AnimationNodeStateMachine_0vtv0")
+anim_player = NodePath("../AnimationPlayer")
+
+[node name="Timer" type="Timer" parent="." index="3"]
+wait_time = 5.0
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="." index="4"]
+transform = Transform3D(15, 0, 0, 0, 15, 0, 0, 0, 15, 0.138138, 11.4663, -0.102768)
+shape = SubResource("CapsuleShape3D_v2nsg")
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

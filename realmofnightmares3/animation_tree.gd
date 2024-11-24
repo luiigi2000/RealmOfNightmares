@@ -14,8 +14,7 @@ func _process(delta: float) -> void:
 	var input := Vector3.ZERO
 	input.x = Input.get_axis("left","right")
 	input.z = Input.get_axis("forward","backward")
-	apply_central_force($TwistPivot.basis * input * 1200.0 * delta)
-
+	apply_central_force($TwistPivot.basis * input * 600.0 * delta)
 	
 	if Input.is_action_just_pressed("ui_cancel"): 
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE) 
