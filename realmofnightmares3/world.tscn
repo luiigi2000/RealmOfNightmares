@@ -1,0 +1,47 @@
+[gd_scene load_steps=8 format=3 uid="uid://byyjgnayoduou"]
+
+[ext_resource type="PackedScene" uid="uid://oyxcr36igkbq" path="res://thecathedral.glb" id="2_agjte"]
+[ext_resource type="PackedScene" uid="uid://r7bfx5fmx8wo" path="res://guy.tscn" id="2_s6wtt"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_wmk8e"]
+sky_top_color = Color(0.0286071, 0.0427044, 0.0636789, 1)
+sky_horizon_color = Color(0.336628, 0.344905, 0.357971, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_s8fbn"]
+sky_material = SubResource("ProceduralSkyMaterial_wmk8e")
+
+[sub_resource type="Environment" id="Environment_06kmd"]
+background_mode = 2
+sky = SubResource("Sky_s8fbn")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_7hbka"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_dagy5"]
+data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_06kmd")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="GUY" parent="." instance=ExtResource("2_s6wtt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.6547, 0)
+
+[node name="thecathedral" parent="." instance=ExtResource("2_agjte")]
+transform = Transform3D(11.3334, 0, 0, 0, 11.3334, 0, 0, 0, 11.3334, -6.053, 0, -4.336)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="thecathedral"]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, -0.1, 0)
+mesh = SubResource("PlaneMesh_7hbka")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="thecathedral/MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="thecathedral/MeshInstance3D/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_dagy5")

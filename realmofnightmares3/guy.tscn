@@ -1,0 +1,92 @@
+[gd_scene load_steps=10 format=3 uid="uid://r7bfx5fmx8wo"]
+
+[ext_resource type="PackedScene" uid="uid://dwxli14fcwgw7" path="res://GUY.glb" id="1_stjh6"]
+[ext_resource type="Script" path="res://rigid_body_3d.gd" id="2_0n5ot"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_go7kk"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_nmlv5"]
+sky_material = SubResource("ProceduralSkyMaterial_go7kk")
+
+[sub_resource type="Environment" id="Environment_tphmg"]
+background_mode = 2
+sky = SubResource("Sky_nmlv5")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3anbc"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ldn56"]
+animation = &"walkactualps"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_3owo8"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_1is8p"]
+states/Start/position = Vector2(240, 113.333)
+states/walkactualps/node = SubResource("AnimationNodeAnimation_ldn56")
+states/walkactualps/position = Vector2(381.333, 94)
+transitions = ["Start", "walkactualps", SubResource("AnimationNodeStateMachineTransition_3owo8")]
+
+[node name="GUY" instance=ExtResource("1_stjh6")]
+lock_rotation = true
+linear_damp = 3.0
+script = ExtResource("2_0n5ot")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="0"]
+environment = SubResource("Environment_tphmg")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." index="1"]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Skeleton3D" parent="Armature" index="0"]
+bones/0/position = Vector3(0, 13.0015, 0)
+bones/0/rotation = Quaternion(-2.98023e-08, 1.19209e-07, 2.11758e-22, 1)
+bones/1/rotation = Quaternion(-3.55271e-15, -1.19209e-07, 4.23516e-22, 1)
+bones/2/rotation = Quaternion(5.43735e-10, 5.67997e-09, -0.0952939, 0.995449)
+bones/3/position = Vector3(-1.21283, 6.07231, -2.58354)
+bones/3/rotation = Quaternion(-0.961485, 0.212614, -0.173624, 0.0140301)
+bones/3/scale = Vector3(1, 1, 1)
+bones/4/rotation = Quaternion(-0.0644676, 0.0400455, -0.0310839, 0.996631)
+bones/5/position = Vector3(0.129782, -1.03458, -1.71763)
+bones/5/rotation = Quaternion(0.986173, 0.164496, 0.0192806, 0.00562273)
+bones/5/scale = Vector3(1, 1, 1)
+bones/6/rotation = Quaternion(0.00548231, 0.00802092, 0.136892, 0.990538)
+bones/6/scale = Vector3(1, 1, 1)
+bones/7/rotation = Quaternion(0.0531405, -0.000175917, -0.740313, 0.670159)
+bones/7/scale = Vector3(1, 1, 1)
+bones/8/position = Vector3(-0.593198, 5.97565, 2.83277)
+bones/8/rotation = Quaternion(0.583179, 0.192408, 0.788352, 0.0371759)
+bones/8/scale = Vector3(1, 1, 1)
+bones/9/rotation = Quaternion(-0.0052908, 0.573878, 0.170041, 0.801076)
+bones/9/scale = Vector3(1, 1, 1)
+bones/11/position = Vector3(0.129781, -1.03458, 1.79668)
+bones/11/rotation = Quaternion(0.986847, -0.157527, 0.0224854, -0.0285155)
+bones/11/scale = Vector3(1, 1, 1)
+bones/12/rotation = Quaternion(-0.0291003, 0.00969924, 0.369782, 0.928612)
+bones/12/scale = Vector3(1, 1, 1)
+bones/13/rotation = Quaternion(0.0340476, 0.00693573, -0.5374, 0.842611)
+bones/13/scale = Vector3(1, 1, 1)
+
+[node name="Cube_003" parent="Armature/Skeleton3D" index="0"]
+transform = Transform3D(-0.0531501, 0.504175, -0.861965, -0.156356, -0.85674, -0.491477, -0.98627, 0.108651, 0.124366, 1.93337, 6.99915, 5.54355)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="4"]
+transform = Transform3D(15, 0, 0, 0, 15, 0, 0, 0, 15, 0.138138, 11.4663, -0.102768)
+shape = SubResource("CapsuleShape3D_3anbc")
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="5"]
+tree_root = SubResource("AnimationNodeStateMachine_1is8p")
+anim_player = NodePath("../AnimationPlayer")
+
+[node name="TwistPivot" type="Node3D" parent="." index="6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 30, 0)
+
+[node name="PitchPivot" type="Node3D" parent="TwistPivot" index="0"]
+transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 0, 10)
+
+[node name="Camera3D" type="Camera3D" parent="TwistPivot/PitchPivot" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 4.47035e-08, 0, -4.47035e-08, 1, 0, 0, 5)
